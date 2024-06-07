@@ -1,0 +1,38 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #effeff;
+}
+#navigation {
+  background-color: #000000;
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 5px 0px 20px 9px #87a5d1;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+  background-color: black;
+  color: white;
+  border: 1px solid blue;
+  border-radius: 8px;
+}
+.topBtn {
+  background-color: white;
+  border-color: white;
+  color: #293241;
+}
+label{
+  margin-bottom: 8px;
+}
+.disabled{
+  background-color: chartreuse;
+}
+#png{
+  margin-right: 8px;
+}

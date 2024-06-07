@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LeaderBoard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/css/homePage.css" />
+  <style>
+    #buttonDiv{
+      display: flex;
+      flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar Starts Here -->
+  <nav class="navbar navbar-expand-lg navbar-dark" id="navigation">
+    <div class="container-fluid">
+      <a href="/expense">
+        <img src="/views/icon.jpg" width="30px" height="30px" id="png" />
+      </a>
+      <a class="navbar-brand" href="/expense">Expense Tracker</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/expense">Home</a>
+          </li>
+          <li class="nav-item">
+            <a id="reportsLink" class="nav-link active" aria-current="page">Reports
+              &#9889</a>
+          </li>
+          <li class="nav-item">
+            <a id="leaderboardLink" class="nav-link active" aria-current="page" href="/premium/getLeaderBoardPage">LeaderBoard &#9889</a>
+          </li>
+        </ul>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button id="buyPremiumButton" class="topBtn btn py-1" type="button" style="background-color:#7fff00;" data-bs-toggle="tooltip"
+            data-bs-placement="left" title="Already a Premium Memeber">
+            Premium Member &#9889
+          </button>
+          <button id="logoutBtn" class="topBtn btn py-1" type="button">Log out</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <!--  Navbar Ends Here -->
+
+  <div id="buttonDiv">
+   <button  id="downloadReportBtn" class="btn btn-primary mb-3 mt-3"> Download Latest Expenses Data</button>
+   <h4> Below are the Previous Reports</h4>
+  </div>
+    <table class="table table-dark table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Links</th>
+          <th scope="col">Date Generated</th>
+        </tr>
+      </thead>
+      <tbody id="list-items">
+
+      </tbody>
+    </table>
+  </div>
+  </div>
+
+  <!-- ---------------------------------------------------------------------------------- -->
+  <!-- scripts -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.2/axios.min.js"
+    integrity="sha512-QTnb9BQkG4fBYIt9JGvYmxPpd6TBeKp6lsUrtiVQsrJ9sb33Bn9s0wMQO9qVBFbPX3xHRAsBHvXlcsrnJjExjg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="../js/reports.js"></script>
+  <script>
+    function onClickAlert() {
+      alert("Buy Premium to access this feature.");
+    }
+    const logoutBtn = document.getElementById('logoutBtn');
+    logoutBtn.addEventListener('click',()=>{
+      localStorage.removeItem('token');
+      window.location.href='/';
+    })
+  </script>
+
+</body>
+
+</html>
