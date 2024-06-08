@@ -3,22 +3,23 @@ const User = require("../models/userModel");
 
 /**
  * A middleware which has access to all request and response, purpose is to verify user using jwt.
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  * @param {*} next A next middleware in function
- * @returns 
+ * @returns
  */
-const authenticate = (req, res, next) => {
+const authenticate = async (req, res, next) => {
   try {
-    const token = req.header("Authorization")
-    const user = jwt.verify(token, process.env.JWT_TOKEN); // return an object with userId because we used id in sign method
-    User.findByPk(user.userId).then((user) => {
-      req.user = user;
-      next();
-    });
+    const token = req.header("Authorization");
+    const user = jwt.verify(token, process.env.JWT_TOKEN);
+    const userFound = await User.where("_id").equals(user.userId);
+    req.user=userFound[0];
+    next();
   } catch (err) {
     console.log(err);
-    return res.status(401).json({ success: false,message:"Authentication Failed" });
+    return res
+      .status(401)
+      .json({ success: false, message: "Authentication Failed" });
   }
 };
 

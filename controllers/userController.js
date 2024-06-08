@@ -2,7 +2,6 @@ const path = require("path");
 const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const sequelize = require("../services/dbConn");
 /**
  *
  * @param {*} id Required
@@ -20,15 +19,10 @@ const generateAccessToken = (id, email) => {
  * @description return the response of creation of user
  */
 const handleSignUp = async (req, res, next) => {
-  const transaction = await sequelize.transaction();
   try {
     const { name, email, password } = req.body;
     bcrypt.hash(password, 10, async (err, hash) => {
-      const result = await userModel.create(
-        { name, email, password: hash },
-        { transaction: transaction }
-      );
-      await transaction.commit();
+      const result = await userModel.create({ name, email, password: hash });
     });
     res
       .status(200)
@@ -59,7 +53,8 @@ const handleSignUp = async (req, res, next) => {
 const handleLogin = async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    const user = await userModel.findOne({ where: { email: email } });
+    const users = await userModel.where('email').equals(email);
+    const user= users[0];
     bcrypt.compare(password, user.password, (err, result) => {
       if (err) {
         console.log(err);
@@ -79,6 +74,7 @@ const handleLogin = async (req, res, next) => {
       }
     });
   } catch (err) {
+    console.log(err);
     return res.status(500).json({ success: false, message: "Can not login" });
   }
 };
@@ -90,7 +86,7 @@ const handleLogin = async (req, res, next) => {
  * @description Serve the static login.html
  */
 const handleLoginPage = (req, res, next) => {
-    res.sendFile(path.join(__dirname, "../", "public", "views", "login.html"));
+  res.sendFile(path.join(__dirname, "../", "public", "views", "login.html"));
 };
 /**
  *
@@ -101,10 +97,7 @@ const handleLoginPage = (req, res, next) => {
  */
 const isPremiumUser = async (req, res, next) => {
   try {
-    const user = await userModel.findOne({
-      where: { id: req.user.id },
-      attributes: ["isPremiumUser"],
-    });
+    const user = (await userModel.where('_id').equals(req.user._id)).at(0);
     if (user.isPremiumUser === true) {
       return res.status(200).send(user);
     }

@@ -12,12 +12,8 @@ const getHomePage = (req, res, next) => {
 
 const getAllExpenses = async (req, res, next) => {
   try {
-    const userId = req.user.id;
-    const expenses = await expenseModel.findAll({
-      where: {
-        userId: userId,
-      },
-    });
+    const userId = req.user._id;
+    const expenses = await expenseModel.find({ createdBy: userId });
     return res.status(200).json({ success: true, result: expenses });
   } catch (err) {
     return res.status(500).json({
@@ -33,15 +29,14 @@ const getAllExpensesforPagination = async (req, res, next) => {
     const limit = Number(req.params.limit);
     //offset - number of records want to ignore
     const offset = (pageNo - 1) * limit;
-    const totalExpenses = await expenseModel.count({
-      where: { userId: req.user.id },
+    const totalExpenses = await expenseModel.countDocuments({
+      createdBy: req.user._id,
     });
     const totalPages = Math.ceil(totalExpenses / limit);
-    const expenses = await expenseModel.findAll({
-      where: { userId: req.user.id },
-      offset: offset, 
-      limit: limit,
-    });
+    const expenses = await expenseModel
+      .find({ createdBy: req.user._id })
+      .skip(offset)
+      .limit(limit);
     res.json({ expenses: expenses, totalPages: totalPages });
   } catch (err) {
     console.log(err);
@@ -81,11 +76,7 @@ const downloadExpenseReport = async (req, res, next) => {
  */
 const getExpenses = async (userId) => {
   try {
-    const data = await expenseModel.findAll({
-      where: {
-        userId: userId,
-      },
-    });
+    const data = await expenseModel.find({ createdBy: userId });
     return data;
   } catch (err) {
     return null;
@@ -93,38 +84,25 @@ const getExpenses = async (userId) => {
 };
 
 const addExpense = async (req, res, next) => {
-  const trans = await sequelize.transaction();
   try {
     let previousTotalExpenses = req.user.totalExpenses;
-    const userId = req.user.id;
+    const userId = req.user._id;
     const { date, amount, description, category } = req.body;
-    await userModel.update(
-      {
-        totalExpenses: Number(previousTotalExpenses) + Number(amount),
-      },
-      {
-        where: {
-          id: userId,
-        },
-      },
-      { transaction: trans }
+    await userModel.updateOne(
+      { _id: userId },
+      { totalExpenses: Number(previousTotalExpenses) + Number(amount) }
     );
-    await expenseModel.create(
-      {
-        date,
-        amount,
-        description,
-        category,
-        userId: req.user.id,
-      },
-      { transaction: trans }
-    );
-    await trans.commit();
+    await expenseModel.create({
+      date,
+      amount,
+      description,
+      category,
+      createdBy: userId,
+    });
     return res
       .status(201)
       .json({ success: true, message: "expense added successfully" });
   } catch (err) {
-    await trans.rollback();
     console.log(err);
     return res
       .json(400)
@@ -134,21 +112,13 @@ const addExpense = async (req, res, next) => {
 
 const deleteExpense = async (req, res, next) => {
   try {
-    const expense = await expenseModel.findOne({
-      where: {
-        id: req.params.id,
-      },
-    });
-    await expenseModel.destroy({ where: { id: req.params.id } });
+    const expense = await expenseModel.findOne({ _id: req.params.id });
     console.log(expense);
-    await userModel.update(
+    await expenseModel.deleteOne({ _id: req.params.id });
+    await userModel.updateOne(
+      { _id: req.user._id },
       {
         totalExpenses: Number(req.user.totalExpenses) - Number(expense.amount),
-      },
-      {
-        where: {
-          id: expense.userId,
-        },
       }
     );
     res.status(200).json({ success: true, message: "Deleted" });
@@ -165,24 +135,23 @@ const editExpense = async (req, res, next) => {
     const category = req.body.category;
     const description = req.body.description;
     const amount = req.body.amount;
-    const expense = await expenseModel.findByPk(id);
-    await userModel.update(
+    const expense = await expenseModel.findOne({ _id: id });
+    await userModel.updateOne(
+      { _id: req.user._id },
       {
         totalExpenses:
           Number(req.user.totalExpenses) -
           Number(expense.amount) +
           Number(amount),
-      },
-      { where: { id: req.user.id } }
+      }
     );
-
-    await expenseModel.update(
+    await expenseModel.updateOne(
+      { $and: [{ _id: id }, { createdBy: req.user._id }] },
       {
         category: category,
         description: description,
         amount: amount,
-      },
-      { where: { id: id, userId: req.user.id } }
+      }
     );
 
     res.redirect("/expense");

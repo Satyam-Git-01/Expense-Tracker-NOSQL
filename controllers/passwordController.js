@@ -18,7 +18,7 @@ const sendMail = async (req, res, next) => {
   try {
     const { email } = req.body;
     const resetId = uuidv4();
-    const resetUser = await userModel.findOne({ where: { email: email } });
+    const resetUser = await userModel.findOne({ email: email });
     if (!resetUser) {
       return res
         .status(400)
@@ -87,7 +87,7 @@ const updatePassword = async (req, res, next) => {
     });
     if (checkStatusOfRequest) {
       const userId = checkStatusOfRequest.userId;
-       await ResetPasswordModel.update(
+      await ResetPasswordModel.update(
         { isActive: false },
         { where: { id: requestId } }
       );

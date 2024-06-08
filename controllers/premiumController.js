@@ -6,11 +6,11 @@ const { Op } = require("sequelize");
 const AWS = require("aws-sdk");
 const getLeaderBoardData = async (req, res, next) => {
   try {
-    const result = await userModel.findAll({
-      order: [["totalExpenses", "DESC"]],
-    });
+    const result = await userModel.find().sort({ totalExpenses: -1 });
+    console.log(result);
     return res.status(200).send(result);
   } catch (err) {
+    console.log(err);
     return res.status(500).send("Error");
   }
 };
@@ -28,10 +28,8 @@ const getReportsPage = async (req, res, next) => {
 const getDownloadedReportsData = async (req, res, next) => {
   try {
     const id = req.user.id;
-    const result = await FilesDownloadedModel.findAll({
-      where: {
-        userId: id,
-      },
+    const result = await FilesDownloadedModel.find({
+      userId: id,
     });
     return res.status(200).json({ success: true, result: result });
   } catch (err) {

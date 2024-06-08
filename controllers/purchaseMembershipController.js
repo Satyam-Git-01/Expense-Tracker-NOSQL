@@ -1,6 +1,6 @@
 const Razorpay = require("razorpay");
 const Order = require("../models/orderModel");
-const {generateAccessToken} = require("./userController");
+const { generateAccessToken } = require("./userController");
 
 const purchasePremium = async (req, res) => {
   try {
@@ -9,19 +9,21 @@ const purchasePremium = async (req, res) => {
       key_secret: process.env.RAZORPAY_KEY_SECRET,
     });
     const amount = 1000;
-    rzp.orders.create({ amount, currency: "INR" }, (err, order) => {
+    rzp.orders.create({ amount, currency: "INR" }, async (err, order) => {
       if (err) {
-        console.log(err)
+        console.log(err);
         throw new Error(JSON.stringify(err));
       }
-      req.user
-        .createOrder({ orderid: order.id, status: "PENDING" })
-        .then(() => {
-          return res.status(201).json({ order, key_id: rzp.key_id });
-        })
-        .catch((err) => {
-          throw new Error(err);
-        });
+      await Order.create({orderid:order.id,status:"PENDING",userId:req.user._id})
+      return res.status(201).json({ order, key_id: rzp.key_id });
+      // req.user
+      //   .createOrder({ orderid: order.id, status: "PENDING" })
+      //   .then(() => {
+      //     return res.status(201).json({ order, key_id: rzp.key_id });
+      //   })
+      //   .catch((err) => {
+      //     throw new Error(err);
+      //   });
     });
   } catch (err) {
     console.log(err);
@@ -33,12 +35,12 @@ const updateTransactionStatus = async (req, res) => {
   try {
     const userId = req.user.id;
     const { payment_id, order_id } = req.body;
-    const order = await Order.findOne({ where: { orderid: order_id } });
-    const promise1 = order.update({
+    const order = await Order.findOne({ orderid: order_id });
+    const promise1 = order.updateOne({
       paymentid: payment_id,
       status: "SUCCESSFUL",
     });
-    const promise2 = req.user.update({ isPremiumUser: true });
+    const promise2 = req.user.updateOne({ isPremiumUser: true });
 
     Promise.all([promise1, promise2])
       .then(() => {

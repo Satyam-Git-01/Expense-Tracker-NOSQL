@@ -148,7 +148,7 @@ function showItems(data, totalPages) {
     td1.innerHTML = `<span class="badge bg-primary rounded-pill">${item.amount} &#8377</span>`;
     td2.innerHTML = `${item.description}`;
     td3.innerHTML = `${item.category}`;
-    td4.innerHTML = `<div> <button class='btn btn-danger' onclick=deleteItem(${item.id})>Delete</button>  <button class='btn btn-dark' onclick=editExpense(event,${item.id})>Edit</button></div>`;
+    td4.innerHTML = `<div> <button class='btn btn-danger' onclick=deleteItem("${item._id}")>Delete</button>  <button class='btn btn-dark' onclick=editExpense(event,"${item._id}")>Edit</button></div>`;
     tr.appendChild(th);
     tr.appendChild(td1);
     tr.appendChild(td2);
@@ -186,7 +186,7 @@ async function editExpense(event, id) {
       }
     );
     const expensetoEdit = allExpenses.data.result.filter(
-      (item) => item.id === id
+      (item) => item._id === id
     )[0];
     amount.value = expensetoEdit.amount;
     description.value = expensetoEdit.description;
