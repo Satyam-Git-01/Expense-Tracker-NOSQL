@@ -9,6 +9,7 @@ const changePassword = async (event) => {
       }
     );
     window.location.href = "/";
+    alert("Password Changed SuccessFully")
   } catch (err) {
     console.log(err);
   }

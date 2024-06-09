@@ -14,7 +14,7 @@ DBConn(process.env.DB_URL);
  const expenseRoute = require("./routers/expenseRoute");
  const purchaseRoute = require("./routers/purchaseRoute");
 const premiumRoute = require("./routers/premiumRoute");
-// const passwordRoute = require("./routers/passwordRoute");
+const passwordRoute = require("./routers/passwordRoute");
 
 //Imports for Models
 // const User = require("./models/userModel");
@@ -34,7 +34,7 @@ app.use("/user", userRoute);
 app.use("/expense", expenseRoute);
  app.use("/purchase", purchaseRoute);
 app.use("/premium", premiumRoute);
-// app.use("/password", passwordRoute);
+app.use("/password", passwordRoute);
 
 
 app.listen(5800,()=>{

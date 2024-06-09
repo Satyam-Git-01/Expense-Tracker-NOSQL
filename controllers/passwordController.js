@@ -83,23 +83,17 @@ const updatePassword = async (req, res, next) => {
     const { newPassword } = req.body;
     const requestId = req.headers.referer.split("/").at(-1);
     const checkStatusOfRequest = await ResetPasswordModel.findOne({
-      where: { id: requestId, isActive: true },
+      id: requestId,
+      isActive: true,
     });
     if (checkStatusOfRequest) {
       const userId = checkStatusOfRequest.userId;
-      await ResetPasswordModel.update(
-        { isActive: false },
-        { where: { id: requestId } }
-      );
+      await ResetPasswordModel.updateOne({ id: requestId }, { isActive: false });
       const newhashedPassword = await hashedPassword(newPassword);
-      await userModel.update(
+      await userModel.updateOne(
+        { _id: userId },
         {
           password: newhashedPassword,
-        },
-        {
-          where: {
-            id: userId,
-          },
         }
       );
       return res
@@ -111,6 +105,7 @@ const updatePassword = async (req, res, next) => {
         .json({ message: "Link is already Used Once, Request for new Link!" });
     }
   } catch (err) {
+    console.log(err);
     return res.status(400).json({ message: "Failed to change password!" });
   }
 };
