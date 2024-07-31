@@ -17,9 +17,7 @@ const passwordRoute = require("./routers/passwordRoute");
 
 //Application Level Middlewares
 app.use(
-  cors({
-    origin: "*",
-  })
+  cors()
 );
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
