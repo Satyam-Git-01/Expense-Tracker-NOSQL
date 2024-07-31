@@ -3,7 +3,6 @@ const { handleSignUp ,handleLoginPage,handleLogin,isPremiumUser} = require("../c
 const authenticatemiddleware = require("../middlewares/auth");
 const userRoute = express.Router();
 
-//userRoute.use(express.static("public"))
 userRoute.get('/',handleLoginPage)
 userRoute.post("/signUp", handleSignUp);
 userRoute.post("/login",handleLogin)

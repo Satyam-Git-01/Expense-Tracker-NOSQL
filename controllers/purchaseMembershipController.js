@@ -16,14 +16,6 @@ const purchasePremium = async (req, res) => {
       }
       await Order.create({orderid:order.id,status:"PENDING",userId:req.user._id})
       return res.status(201).json({ order, key_id: rzp.key_id });
-      // req.user
-      //   .createOrder({ orderid: order.id, status: "PENDING" })
-      //   .then(() => {
-      //     return res.status(201).json({ order, key_id: rzp.key_id });
-      //   })
-      //   .catch((err) => {
-      //     throw new Error(err);
-      //   });
     });
   } catch (err) {
     console.log(err);

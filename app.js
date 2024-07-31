@@ -16,13 +16,6 @@ DBConn(process.env.DB_URL);
 const premiumRoute = require("./routers/premiumRoute");
 const passwordRoute = require("./routers/passwordRoute");
 
-//Imports for Models
-// const User = require("./models/userModel");
-// const Expense = require("./models/expenseModel");
-// const Order = require("./models/orderModel");
-// const ResetPassword = require("./models/resetPasswordModel");
-// const FileDownloaded = require("./models/fileDownloadedModel");
-
 //Application Level Middlewares
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
