@@ -1,7 +1,7 @@
 async function getLeaderBoardData() {
   try {
     const result = axios.get(
-      "http://localhost:5800/premium/getLeaderBoardData"
+      "https://expense-tracker-nosql.vercel.app/premium/getLeaderBoardData"
     );
     const data = await result;
     console.log(data);

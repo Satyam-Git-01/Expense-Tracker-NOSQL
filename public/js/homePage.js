@@ -6,7 +6,7 @@ const logoutBtn = document.getElementById("logoutBtn");
 async function buyPremium(e) {
   const token = localStorage.getItem("token");
   const res = await axios.get(
-    "http://localhost:5800/purchase/premiumMembership",
+    "https://expense-tracker-nosql.vercel.app/purchase/premiumMembership",
     { headers: { Authorization: token } }
   );
   var options = {
@@ -15,7 +15,7 @@ async function buyPremium(e) {
     // This handler function will handle the success payment
     handler: async function (response) {
       const res = await axios.post(
-        "http://localhost:5800/purchase/updateTransactionStatus",
+        "https://expense-tracker-nosql.vercel.app/purchase/updateTransactionStatus",
         {
           order_id: options.order_id,
           payment_id: response.razorpay_payment_id,
@@ -58,7 +58,7 @@ async function addExpense(event) {
   };
   try {
     const result = await axios.post(
-      "http://localhost:5800/expense/addExpense",
+      "https://expense-tracker-nosql.vercel.app/expense/addExpense",
       expenseData,
       { headers: { Authorization: token } }
     );
@@ -74,7 +74,7 @@ async function getAllExpenses() {
     const token = localStorage.getItem("token");
     const limit = localStorage.getItem("limit");
     const data = await axios.get(
-      `http://localhost:5800/expense/getAllExpenses/${limit}/1`,
+      `https://expense-tracker-nosql.vercel.app/expense/getAllExpenses/${limit}/1`,
       {
         headers: {
           Authorization: token,
@@ -108,7 +108,7 @@ const nonPremiumMessage = () => {
 async function isPremiumUser() {
   try {
     const token = localStorage.getItem("token");
-    const res = await axios.get("http://localhost:5800/user/isPremiumUser", {
+    const res = await axios.get("https://expense-tracker-nosql.vercel.app/user/isPremiumUser", {
       headers: { Authorization: token },
     });
     if (res.data.isPremiumUser) {
@@ -178,7 +178,7 @@ async function editExpense(event, id) {
     const addExpenseBtn = document.getElementById("addbtn");
     const addForm = document.getElementById("addForm");
     const allExpenses = await axios.get(
-      "http://localhost:5800/expense/getAllExpenses",
+      "https://expense-tracker-nosql.vercel.app/expense/getAllExpenses",
       {
         headers: {
           Authorization: token,
@@ -195,7 +195,7 @@ async function editExpense(event, id) {
     addExpenseBtn.addEventListener("click", async function update(e) {
       e.preventDefault();
       const res = await axios.post(
-        `http://localhost:5800/expense/editExpense/${id}`,
+        `https://expense-tracker-nosql.vercel.app/expense/editExpense/${id}`,
         {
           amount: amount.value,
           description: description.value,
@@ -215,7 +215,7 @@ async function paginationBtn(e) {
     const token = localStorage.getItem("token");
     const limit = localStorage.getItem("limit");
     const result = await axios.get(
-      `http://localhost:5800/expense/getAllExpenses/${limit}/${pageNo}`,
+      `https://expense-tracker-nosql.vercel.app/expense/getAllExpenses/${limit}/${pageNo}`,
       {
         headers: { Authorization: token },
       }
@@ -231,7 +231,7 @@ async function deleteItem(id) {
   try {
     const token = localStorage.getItem("token");
     const result = await axios.delete(
-      `http://localhost:5800/expense/delete/${id}`,
+      `https://expense-tracker-nosql.vercel.app/expense/delete/${id}`,
       {
         headers: {
           Authorization: token,
@@ -247,7 +247,7 @@ async function deleteItem(id) {
 async function getLeaderBoardData() {
   try {
     const result = axios.get(
-      "http://localhost:5800/premium/getLeaderBoardData"
+      "https://expense-tracker-nosql.vercel.app/premium/getLeaderBoardData"
     );
     const data = await result;
     console.log(data);

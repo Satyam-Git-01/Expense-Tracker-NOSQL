@@ -3,7 +3,7 @@ const changePassword = async (event) => {
   try {
     const newPassword = event.target.newPassword.value;
     const result = await axios.post(
-      "http://localhost:5800/password/updatePassword",
+      "https://expense-tracker-nosql.vercel.app/password/updatePassword",
       {
         newPassword,
       }
