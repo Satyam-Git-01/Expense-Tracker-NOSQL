@@ -23,12 +23,13 @@ const handleSignUp = async (req, res, next) => {
     const { name, email, password } = req.body;
     bcrypt.hash(password, 10, async (err, hash) => {
       const result = await userModel.create({ name, email, password: hash });
+      console.log(result);
+      res
+        .status(200)
+        .send(
+          `<script>alert('User Created Successfully!'); window.location.href='/'</script>`
+        );
     });
-    res
-      .status(200)
-      .send(
-        `<script>alert('User Created Successfully!'); window.location.href='/'</script>`
-      );
   } catch (err) {
     await transaction.rollback();
     if (err.errors[0].type === "unique violation") {
@@ -53,8 +54,8 @@ const handleSignUp = async (req, res, next) => {
 const handleLogin = async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    const users = await userModel.where('email').equals(email);
-    const user= users[0];
+    const users = await userModel.where("email").equals(email);
+    const user = users[0];
     bcrypt.compare(password, user.password, (err, result) => {
       if (err) {
         console.log(err);
@@ -97,7 +98,7 @@ const handleLoginPage = (req, res, next) => {
  */
 const isPremiumUser = async (req, res, next) => {
   try {
-    const user = (await userModel.where('_id').equals(req.user._id)).at(0);
+    const user = (await userModel.where("_id").equals(req.user._id)).at(0);
     if (user.isPremiumUser === true) {
       return res.status(200).send(user);
     }
