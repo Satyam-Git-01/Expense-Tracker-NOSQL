@@ -1,5 +1,4 @@
 const path = require("path");
-const sequelize = require("../services/dbConn");
 const { uploadTos3 } = require("../services/S3Services");
 
 const expenseModel = require("../models/expenseModel");

@@ -2,7 +2,6 @@ const userModel = require("../models/userModel");
 const Expense = require("../models/expenseModel");
 const FilesDownloadedModel = require("../models/fileDownloadedModel");
 const path = require("path");
-const { Op } = require("sequelize");
 const AWS = require("aws-sdk");
 const getLeaderBoardData = async (req, res, next) => {
   try {
