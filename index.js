@@ -4,6 +4,7 @@ const dotenv = require("dotenv").config();
 const DBConn = require("./services/dbConn");
 const bodyParser = require("body-parser");
 const app = express();
+const cors = require("cors");
 
 const PORT_NUMBER = process.env.PORT_NUMBER || 4300;
 
@@ -17,6 +18,7 @@ const premiumRoute = require("./routers/premiumRoute");
 const passwordRoute = require("./routers/passwordRoute");
 
 //Application Level Middlewares
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + "/public"));
