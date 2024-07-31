@@ -8,8 +8,6 @@ const cors = require("cors");
 
 const PORT_NUMBER = process.env.PORT_NUMBER || 4300;
 
-DBConn(process.env.DB_URL);
-
 // //Importing Routes
 const userRoute = require("./routers/userRoute");
 const expenseRoute = require("./routers/expenseRoute");
@@ -18,10 +16,14 @@ const premiumRoute = require("./routers/premiumRoute");
 const passwordRoute = require("./routers/passwordRoute");
 
 //Application Level Middlewares
-app.use(cors());
+app.use(cors({
+  
+}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + "/public"));
+
+DBConn(process.env.DB_URL);
 
 //Route Level Middlewares
 app.use("/", userRoute);
