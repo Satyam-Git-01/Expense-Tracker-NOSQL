@@ -51,7 +51,7 @@ const sendMail = async (req, res, next) => {
       textContent: "link below",
       htmlContent: `<h4>Dear ${resetUser.name}</h4>
       <br/>
-      <p>It seems you have forgotten your password. Please <a href="http://localhost:5800/password/resetPasswordPage/{{params.requestId}}"> Click Here</a> to reset your password. Your password should have 8 or more characters with at least one uppercase letter, lowercase letter, number and special character. Please note that this link will expire in 24 hours.</p>
+      <p>It seems you have forgotten your password. Please <a href="https://expense-tracker-nosql.vercel.app/password/resetPasswordPage/{{params.requestId}}"> Click Here</a> to reset your password. Your password should have 8 or more characters with at least one uppercase letter, lowercase letter, number and special character. Please note that this link will expire in 24 hours.</p>
     <br/>
         <p>Thanks & Best Regards,
         <br/>

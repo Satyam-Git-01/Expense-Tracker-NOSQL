@@ -20,7 +20,7 @@ function login() {
     password: loginPassword.value,
   };
   axios
-    .post("http://localhost:5800/user/login", loginDetails)
+    .post("https://expense-tracker-nosql.vercel.app/user/login", loginDetails)
     .then((result) => {
       console.log(result);
       localStorage.setItem("token", result.data.token);
